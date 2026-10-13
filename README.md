@@ -18,18 +18,20 @@ vercel.json, package.json                                  -> konfigurasi
 2. Buka https://vercel.com/new, pilih **Import** repository tadi.
 3. Framework Preset: **Other** (biarkan Build Command dan Output Directory kosong).
 4. Buka **Environment Variables**, tambahkan:
-   - `AI_API_KEY` = API key kamu (wajib)
-   - `AI_BASE_URL` = `https://api.z.ai/api/paas/v4` (opsional)
-   - `AI_MODEL` = `glm-4.5-flash` (opsional)
+   - `GROQ_API_KEY` = API key dari https://console.groq.com/keys (wajib, diawali `gsk_`)
+   - `GROQ_MODEL` = `llama-3.3-70b-versatile` (opsional)
+   - `GROQ_BASE_URL` = `https://api.groq.com/openai/v1` (opsional)
 5. Klik **Deploy**. Setiap `git push` ke GitHub akan otomatis deploy ulang.
 
-Jika key kamu dari platform bigmodel.cn, isi `AI_BASE_URL` dengan `https://open.bigmodel.cn/api/paas/v4`. Penyedia lain yang kompatibel dengan format OpenAI (`/chat/completions`) juga bisa dipakai dengan mengganti `AI_BASE_URL` dan `AI_MODEL`.
+Model lain di Groq yang bisa dicoba lewat `GROQ_MODEL`: `llama-3.1-8b-instant` (lebih cepat, lebih ringan). Daftar lengkap ada di https://console.groq.com/docs/models.
+
+Jika mengubah Environment Variables setelah deploy, lakukan **Redeploy** agar nilainya terbaca.
 
 ## Jalankan lokal
 
 ```bash
 npm i -g vercel
-cp .env.example .env     # isi AI_API_KEY
+cp .env.example .env     # isi GROQ_API_KEY
 vercel dev
 ```
 
@@ -39,5 +41,5 @@ Edit konstanta `SYSTEM_PROMPT` di `api/chat.js`.
 
 ## Keamanan
 
-- Jangan menaruh API key di kode atau commit file `.env`. Key hanya disimpan di Environment Variables Vercel.
+- Jangan menaruh API key di kode atau commit file `.env`. Key hanya disimpan di Environment Variables Vercel dan hanya dibaca oleh `api/chat.js` di server (tidak pernah dikirim ke browser).
 - Endpoint `/api/chat` bisa dipanggil siapa saja yang tahu URL-nya, jadi pakai key dengan batas kuota/biaya.
